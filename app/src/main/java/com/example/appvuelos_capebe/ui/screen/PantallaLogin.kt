@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.appvuelos_capebe.R
-import com.example.appvuelos_capebe.components.Footer
-import com.example.appvuelos_capebe.components.Header
+import com.example.appvuelos_capebe.ui.components.Footer
+import com.example.appvuelos_capebe.ui.components.Header
 
 @Composable
 fun PantallaLogin () {
