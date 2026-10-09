@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,38 +22,48 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.appvuelos_capebe.R
+import com.example.appvuelos_capebe.ui.components.Footer
+import com.example.appvuelos_capebe.ui.components.Header
 
 @Composable
-fun PantallaLogin (){
+fun PantallaLogin () {
     val context = LocalContext.current
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF9ECDEB)),
-        contentAlignment = Alignment.Center
+    Scaffold(
+        topBar = { Header(title = "Bienvenido a CAPEBE") },
+        bottomBar = { Footer() }
+    ) { paddingInterior ->
 
-    ){
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.imagen_portada_capebe),
-            contentDescription = "Logo CAPEBE",
-            modifier = Modifier.size(250.dp)
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingInterior)
+                .background(Color(0xFF9ECDEB)),
+            contentAlignment = Alignment.Center
 
-        Spacer(modifier = Modifier.height(40.dp))
+        ) {
 
-        Button(onClick = {
-            Toast.makeText(context, "¡Boton funcionando!", Toast.LENGTH_SHORT).show()
-        }) {
-            Text(text = "Ingresar ")
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.imagen_portada_capebe),
+                    contentDescription = "Logo CAPEBE",
+                    modifier = Modifier.size(250.dp)
+                )
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                Button(onClick = {
+                    Toast.makeText(context, "¡Boton funcionando!", Toast.LENGTH_SHORT).show()
+                }) {
+                    Text(text = "Ingresar ")
+                }
+
+            }
         }
-
-      }
     }
 }
