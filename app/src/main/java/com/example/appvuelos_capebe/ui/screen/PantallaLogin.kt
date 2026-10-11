@@ -26,7 +26,9 @@ import com.example.appvuelos_capebe.ui.components.Footer
 import com.example.appvuelos_capebe.ui.components.Header
 
 @Composable
-fun PantallaLogin () {
+fun PantallaLogin(
+    onNavigateToLogin: () -> Unit
+) {
     val context = LocalContext.current
 
     Scaffold(
@@ -34,16 +36,13 @@ fun PantallaLogin () {
         bottomBar = { Footer() }
     ) { paddingInterior ->
 
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingInterior)
                 .background(Color(0xFF9ECDEB)),
             contentAlignment = Alignment.Center
-
         ) {
-
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -58,11 +57,11 @@ fun PantallaLogin () {
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Button(onClick = {
-                    Toast.makeText(context, "¡Boton funcionando!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "¡Bienvenido a CAPEBE!", Toast.LENGTH_SHORT).show()
+                    onNavigateToLogin()
                 }) {
-                    Text(text = "Ingresar ")
+                    Text(text = "Ingresar")
                 }
-
             }
         }
     }
