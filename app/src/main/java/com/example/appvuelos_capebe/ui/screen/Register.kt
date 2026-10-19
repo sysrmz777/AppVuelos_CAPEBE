@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -45,19 +44,15 @@ fun Register(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(24.dp),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "Crear Cuenta",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
+            Text("R e g i s t r o", style = MaterialTheme.typography.headlineMedium)
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            //Nombre
+            // nombre
             OutlinedTextField(
                 value = state.name,
                 onValueChange = { viewModel.onNameChanged(it) },
@@ -68,11 +63,11 @@ fun Register(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            //Correo
+            // correo
             OutlinedTextField(
                 value = state.email,
                 onValueChange = { viewModel.onEmailChanged(it) },
-                label = { Text("Correo Electrónico") },
+                label = { Text("Correo Electronico") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth()
@@ -80,11 +75,11 @@ fun Register(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            //Contraseña
+            // contrasena
             OutlinedTextField(
                 value = state.password,
                 onValueChange = { viewModel.onPasswordChanged(it) },
-                label = { Text("Contraseña") },
+                label = { Text("Contrasena") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -93,18 +88,18 @@ fun Register(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            //Repetir Contraseña
+            // repetir contrasena
             OutlinedTextField(
                 value = state.confirmPassword,
                 onValueChange = { viewModel.onConfirmPasswordChanged(it) },
-                label = { Text("Repetir Contraseña") },
+                label = { Text("Repetir Contrasena") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 modifier = Modifier.fillMaxWidth()
             )
 
-            //Mensaje de error
+            // muestra mensaje de error
             if (state.errorMessage != null) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -116,11 +111,15 @@ fun Register(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            //Boton principal registrarse
+            // boton de registro
             Button(
                 onClick = {
-                    viewModel.onRegisterClick {
-                        Toast.makeText(context, "¡Registro exitoso! Inicia sesión.", Toast.LENGTH_SHORT).show()
+                    viewModel.onRegisterClick(context) {
+                        Toast.makeText(
+                            context,
+                            "Registro exitoso. Por favor inicia sesion.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         onNavigateToLogin()
                     }
                 },
@@ -131,14 +130,12 @@ fun Register(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            //Boton secundario volver al login
             OutlinedButton(
                 onClick = { onNavigateToLogin() },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "¿Ya tienes cuenta? Iniciar Sesión")
+                Text(text = "Volver a Login")
             }
         }
     }
 }
-
