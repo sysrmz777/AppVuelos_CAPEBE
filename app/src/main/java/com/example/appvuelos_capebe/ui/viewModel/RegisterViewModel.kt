@@ -1,10 +1,15 @@
 package com.example.appvuelos_capebe.ui.viewModel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.appvuelos_capebe.data.database.AppDatabase
+import com.example.appvuelos_capebe.data.local.entity.UsuarioEntity
 import com.example.appvuelos_capebe.model.RegisterModel
+import kotlinx.coroutines.launch
 
 class RegisterViewModel : ViewModel() {
     var uiState by mutableStateOf(RegisterModel())
@@ -26,7 +31,7 @@ class RegisterViewModel : ViewModel() {
         uiState = uiState.copy(confirmPassword = confirmPassword, errorMessage = null)
     }
 
-    fun onRegisterClick(onSuccess: () -> Unit) {
+    fun onRegisterClick(context: Context, onSuccess: () -> Unit) {
         val state = uiState
 
         if (state.name.isBlank() || state.email.isBlank() || state.password.isBlank()) {
@@ -34,12 +39,33 @@ class RegisterViewModel : ViewModel() {
             return
         }
 
-        if (state.password != state.confirmPassword) {
-            uiState = uiState.copy(errorMessage = "Las contraseñas no coinciden.")
+        if (!state.email.contains("@")) {
+            uiState = uiState.copy(errorMessage = "Ingresa un correo valido.")
             return
         }
 
-        uiState = uiState.copy(errorMessage = null)
-        onSuccess()
+        if (state.password != state.confirmPassword) {
+            uiState = uiState.copy(errorMessage = "Las contrasenas no coinciden.")
+            return
+        }
+
+        // guardar en sqlite con room
+        viewModelScope.launch {
+            val db = AppDatabase.getDatabase(context)
+            val existingUser = db.usuarioDao().getUserByEmail(state.email)
+
+            if (existingUser != null) {
+                uiState = uiState.copy(errorMessage = "El correo ya esta registrado.")
+            } else {
+                val newUser = UsuarioEntity(
+                    name = state.name,
+                    email = state.email,
+                    password = state.password
+                )
+                db.usuarioDao().registerUser(newUser)
+                uiState = uiState.copy(errorMessage = null)
+                onSuccess()
+            }
+        }
     }
 }

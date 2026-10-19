@@ -19,8 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
@@ -34,7 +34,7 @@ import com.example.appvuelos_capebe.ui.viewModel.LoginViewModel
 @Composable
 fun Login(
     onNavigateToRegister: () -> Unit,
-    onNavigateBackToHome: () -> Unit, // Para volver a la portada (Cerrar sesión)
+    onNavigateBackToHome: () -> Unit,
     onLoginSuccess: () -> Unit = {},
     viewModel: LoginViewModel = viewModel()
 ) {
@@ -42,26 +42,26 @@ fun Login(
     val context = LocalContext.current
 
     Scaffold(
-        topBar = { Header("INICIAR SESIÓN") },
+        topBar = { Header("INICIAR SESION") },
         bottomBar = { Footer() }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(24.dp),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("L O G I N", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+            Text("L o g i n", style = MaterialTheme.typography.headlineMedium)
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Campo de Correo
+            // campo de correo
             OutlinedTextField(
                 value = state.email,
                 onValueChange = { viewModel.onEmailChanged(it) },
-                label = { Text("Correo Electrónico") },
+                label = { Text("Correo Electronico") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth()
@@ -69,11 +69,11 @@ fun Login(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Campo de Contraseña
+            // campo de contrasena
             OutlinedTextField(
                 value = state.password,
                 onValueChange = { viewModel.onPasswordChanged(it) },
-                label = { Text("Contraseña") },
+                label = { Text("Contrasena") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -82,54 +82,61 @@ fun Login(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // 1. "¿Olvidaste tu contraseña?" (Texto clickeable)
+            // has olvidado tu contrasena
             Text(
-                text = "¿Olvidaste tu contraseña?",
+                text = "¿Has olvidado tu contrasena?",
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = 14.sp,
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier
                     .align(Alignment.End)
                     .clickable {
-                        Toast.makeText(context, "Se envió un enlace a tu correo", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Enlace de recuperacion enviado", Toast.LENGTH_SHORT).show()
                     }
             )
 
+            // muestra mensaje de error en rojo si falla el inicio de sesion
+            if (viewModel.errorMessage != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = viewModel.errorMessage!!,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Botón 1: Ingresar
+            // boton de ingresar adaptado a la base de datos
             Button(
                 onClick = {
-                    if (state.email.isBlank() || state.password.isBlank()) {
-                        Toast.makeText(context, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, "¡Sesión iniciada con éxito!", Toast.LENGTH_SHORT).show()
+                    viewModel.onLoginClick(context) {
+                        Toast.makeText(context, "Bienvenido de nuevo", Toast.LENGTH_SHORT).show()
                         onLoginSuccess()
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Ingresar", fontSize = 16.sp)
+                Text(text = "Ingresar")
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Botón 2: Ir a Registro
-            OutlinedButton(
+            // boton para ir al registro
+            Button(
                 onClick = { onNavigateToRegister() },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "¿No tienes cuenta? Regístrate aquí")
+                Text(text = "Ir a Registro")
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // 2. "Volver / Salir" (Cerrar sesión)
             OutlinedButton(
                 onClick = { onNavigateBackToHome() },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Volver a Inicio")
+                Text(text = "Volver")
             }
         }
     }

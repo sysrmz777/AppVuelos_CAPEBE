@@ -6,6 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.appvuelos_capebe.ui.screen.Login
 import com.example.appvuelos_capebe.ui.screen.PantallaLogin
+import com.example.appvuelos_capebe.ui.screen.PlanesVuelo
+import com.example.appvuelos_capebe.ui.screen.Principal
+import com.example.appvuelos_capebe.ui.screen.RecursosNativos
 import com.example.appvuelos_capebe.ui.screen.Register
 
 object Routes {
@@ -13,6 +16,8 @@ object Routes {
     const val LOGIN = "login"
     const val REGISTER = "register"
     const val PRINCIPAL = "principal"
+    const val PLANES_VUELO = "planes_vuelo"
+    const val RECURSOS = "recursos"
 }
 
 @Composable
@@ -21,9 +26,9 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.INICIO
+        startDestination = Routes.INICIO // definimos el inicio
     ) {
-        // RUTA 1 TU PORTADA
+        // pantalla inicio
         composable(Routes.INICIO) {
             PantallaLogin(
                 onNavigateToLogin = {
@@ -32,7 +37,7 @@ fun AppNavigation() {
             )
         }
 
-        // RUTA 2 INICIAR SESION
+        // pantalla login
         composable(Routes.LOGIN) {
             Login(
                 onNavigateToRegister = {
@@ -44,19 +49,55 @@ fun AppNavigation() {
                     }
                 },
                 onLoginSuccess = {
-
+                    navController.navigate(Routes.PRINCIPAL) {
+                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    }
                 }
             )
         }
 
-        // RUTA 3 REGISTRO DE USUARIOS
+        // pantalla registro
         composable(Routes.REGISTER) {
             Register(
                 onNavigateToLogin = {
                     navController.navigate(Routes.LOGIN) {
-                        // Limpia
                         popUpTo(Routes.LOGIN) { inclusive = true }
                     }
+                }
+            )
+        }
+
+        // pantalla principal
+        composable(Routes.PRINCIPAL) {
+            Principal(
+                onNavigateToPlanesVuelo = {
+                    navController.navigate(Routes.PLANES_VUELO)
+                },
+                onNavigateToRecursos = {
+                    navController.navigate(Routes.RECURSOS)
+                },
+                onLogout = {
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.PRINCIPAL) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        // pantalla planes de vuelo
+        composable(Routes.PLANES_VUELO) {
+            PlanesVuelo(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        // pantalla recursos nativos
+        composable(Routes.RECURSOS) {
+            RecursosNativos(
+                onNavigateBack = {
+                    navController.popBackStack()
                 }
             )
         }
